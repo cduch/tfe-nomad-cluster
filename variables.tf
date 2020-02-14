@@ -66,7 +66,9 @@ variable "client_count" {
   description = "amount of nomad clients?"
   default     = "4"
 }
-
+variable "client_name" {
+  default = "nomad-c"
+}
 variable "tag_key" {
   description = "Server rejoin tag_key to identify nomad servers within a region"
   default     = "js_nomad_tag"

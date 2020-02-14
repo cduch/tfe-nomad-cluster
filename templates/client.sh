@@ -23,18 +23,30 @@ advertise {
   rpc  = "$(private_ip):4647"
   serf = "$(private_ip):4648"
 }
-server {
-  enabled          = true
-  bootstrap_expect = ${server_count}
+
+client {
+  enabled = true
   server_join {
     retry_join = ["provider=aws tag_key=nomad_join tag_value=${nomad_join}"]
   }
+  meta {
+    "type" = "worker",
+    "name" = "${node_name}"
+  }
 }
+
 plugin "raw_exec" {
   config {
     enabled = true
   }
 }
+
+plugin "docker" {
+  config {
+    allow_privileged = false
+  }
+}
+
 autopilot {
     cleanup_dead_servers = true
     last_contact_threshold = "200ms"
@@ -55,16 +67,18 @@ source /etc/profile.d/nomad.sh
 echo "--> Generating systemd configuration"
 sudo tee /etc/systemd/system/nomad.service > /dev/null <<EOF
 [Unit]
-Description=Nomad Server
+Description=Nomad Client
 Documentation=https://www.nomadproject.io/docs/
 Requires=network-online.target
 After=network-online.target
+
 [Service]
 ExecStart=/usr/local/bin/nomad agent -config="/etc/nomad.d"
 ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=SIGINT
 Restart=on-failure
 LimitNOFILE=65536
+
 [Install]
 WantedBy=multi-user.target
 EOF
@@ -74,14 +88,9 @@ sudo systemctl enable nomad
 sudo systemctl start nomad
 sleep 2
 
-echo "--> Waiting for all Nomad servers"
-while [ "$(nomad server members 2>&1 | grep "alive" | wc -l)" -lt "${server_count}" ]; do
-  sleep 5
-done
-
 echo "--> Waiting for Nomad leader"
 while [ -z "$(curl -s http://localhost:4646/v1/status/leader)" ]; do
   sleep 5
 done
 
-echo "==> Nomad Server is Installed!"
+echo "==> Nomad Client is Installed!"
