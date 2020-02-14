@@ -24,7 +24,7 @@ advertise {
   serf = "$(private_ip):4648"
 }
 server {
-  enabled          = true
+  enabled          = ${server}
   bootstrap_expect = ${server_count}
   server_join {
     retry_join = ["provider=aws tag_key=nomad_join tag_value=${nomad_join}"]

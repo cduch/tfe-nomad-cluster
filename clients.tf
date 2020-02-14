@@ -11,7 +11,7 @@ data "template_file" "nomad_client" {
     bind_addr           = var.bind_addr
     datacenter          = var.datacenter
     region              = var.region
-    server              = var.server
+    client              = var.client
     nomad_join          = var.tag_value
     node_name           = format("${var.client_name}-%02d", count.index +1)
     nomad_version       = var.nomad_version

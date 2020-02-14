@@ -25,7 +25,7 @@ advertise {
 }
 
 client {
-  enabled = true
+  enabled = ${client}
   server_join {
     retry_join = ["provider=aws tag_key=nomad_join tag_value=${nomad_join}"]
   }
