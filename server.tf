@@ -49,5 +49,12 @@ resource "aws_instance" "nomad_server" {
     delete_on_termination = "true"
   }
 
+  # ebs_block_device  {
+  #   device_name           = "/dev/xvdd"
+  #   volume_type           = "gp2"
+  #   volume_size           = var.ebs_block_device_size
+  #   delete_on_termination = "true"
+  # }
+
   user_data = element(data.template_cloudinit_config.server.*.rendered, count.index)
 }

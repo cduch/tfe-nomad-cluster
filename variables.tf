@@ -81,8 +81,12 @@ variable "tag_value" {
 
 
 variable "root_block_device_size" {
-  default = "20"
+  default = "80"
 }
+
+# variable "ebs_block_device_size" {
+#   default = "60"
+# }
 
 variable "nomad_version" {
   default = "0.10.3"

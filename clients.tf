@@ -3,6 +3,7 @@ data "template_file" "nomad_client" {
   count = var.client_count
   template = "${join("\n", list(
     file("${path.root}/templates/base.sh"),
+    file("${path.root}/templates/docker.sh"),
     file("${path.root}/templates/client.sh")
   ))}"
   vars = {
@@ -48,6 +49,13 @@ resource "aws_instance" "nomad_client" {
     volume_size           = var.root_block_device_size
     delete_on_termination = "true"
   }
+
+  # ebs_block_device  {
+  #   device_name           = "/dev/xvdd"
+  #   volume_type           = "gp2"
+  #   volume_size           = var.ebs_block_device_size
+  #   delete_on_termination = "true"
+  # }
 
   user_data = element(data.template_cloudinit_config.client.*.rendered, count.index)
 }
