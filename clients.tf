@@ -1,11 +1,11 @@
 
 data "template_file" "nomad_client" {
   count = var.client_count
-  template = "${join("\n", list(
+  template = "${join("\n", tolist([
     file("${path.root}/templates/base.sh"),
     file("${path.root}/templates/docker.sh"),
     file("${path.root}/templates/client.sh")
-  ))}"
+  ]))}"
   vars = {
     client_count        = var.client_count
     data_dir            = var.data_dir
