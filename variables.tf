@@ -89,5 +89,5 @@ variable "root_block_device_size" {
 # }
 
 variable "nomad_version" {
-  default = "0.10.3"
+  default = "1.2.5"
 }
