@@ -30,6 +30,11 @@ server {
     retry_join = ["provider=aws tag_key=nomad_join tag_value=${nomad_join}"]
   }
 }
+
+acl {
+  enabled = true
+}
+
 plugin "raw_exec" {
   config {
     enabled = true
