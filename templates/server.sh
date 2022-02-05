@@ -10,6 +10,7 @@ mv nomad /usr/local/bin/
 echo "--> Writing configuration"
 sudo mkdir -p ${data_dir}
 sudo mkdir -p /etc/nomad.d
+sudo echo ${nomad_lic} > ${data_dir}/license.hclic
 sudo tee /etc/nomad.d/config.hcl > /dev/null <<EOF
 name            = "${node_name}"
 data_dir        = "${data_dir}"
@@ -26,6 +27,7 @@ advertise {
 server {
   enabled          = ${server}
   bootstrap_expect = ${server_count}
+  license_path     = ${data_dir}/license.hclic
   server_join {
     retry_join = ["provider=aws tag_key=nomad_join tag_value=${nomad_join}"]
   }

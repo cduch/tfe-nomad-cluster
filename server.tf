@@ -15,6 +15,7 @@ data "template_file" "nomad_server" {
     nomad_join          = var.tag_value
     node_name           = format("${var.server_name}-%02d", count.index +1)
     nomad_version       = var.nomad_version
+    nomad_lic           = var.nomad_lic
   }
 }
 

@@ -64,7 +64,7 @@ variable "client" {
 }
 variable "client_count" {
   description = "amount of nomad clients?"
-  default     = "4"
+  default     = "3"
 }
 variable "client_name" {
   default = "nomad-c"
@@ -89,5 +89,8 @@ variable "root_block_device_size" {
 # }
 
 variable "nomad_version" {
-  default = "1.2.5"
+  description = "i.e. 1.2.5 or 1.2.5+ent"
+  default = "1.2.5+ent"
 }
+
+variable "nomad_lic" {}
