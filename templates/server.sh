@@ -27,7 +27,7 @@ advertise {
 server {
   enabled          = ${server}
   bootstrap_expect = ${server_count}
-  license_path     = ${data_dir}/license.hclic
+  license_path     = "${data_dir}/license.hclic"
   server_join {
     retry_join = ["provider=aws tag_key=nomad_join tag_value=${nomad_join}"]
   }
