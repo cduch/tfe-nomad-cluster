@@ -58,6 +58,10 @@ variable "server_name" {
   default = "nomad-s"
 }
 
+variable "nomad_bootstrap" {
+  default = "true"
+}
+
 variable "client" {
   description = "enable nomad client option?"
   default     = "true"
@@ -104,4 +108,8 @@ variable "consul_version" {
 
 variable "consul_lic" {
   default = "NULL"
+}
+
+variable "consul_enabled" {
+  default = "true"
 }

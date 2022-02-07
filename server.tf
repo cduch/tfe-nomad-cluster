@@ -16,9 +16,10 @@ data "template_file" "nomad_server" {
     node_name           = format("${var.server_name}-%02d", count.index +1)
     nomad_version       = var.nomad_version
     nomad_lic           = var.nomad_lic
+    nomad_bootstrap     = var.nomad_bootstrap
     consul_version      = var.consul_version
     consul_lic          = var.consul_lic
-    #consul_enabled      = var.consul_enabled
+    consul_enabled      = var.consul_enabled
   }
 }
 

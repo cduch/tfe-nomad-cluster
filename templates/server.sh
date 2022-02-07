@@ -36,7 +36,7 @@ server {
 }
 
 acl {
-  enabled = false
+  enabled = ${nomad_bootstrap}
 }
 
 plugin "raw_exec" {
@@ -178,5 +178,5 @@ sleep 2
 #####   MAIN   #####
 ####################
 
-install_consul
+[[ ${consul_enabled} = "true" ]] && install_consul
 install_nomad
