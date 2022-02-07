@@ -36,7 +36,7 @@ server {
 }
 
 acl {
-  enabled = true
+  enabled = false
 }
 
 plugin "raw_exec" {
@@ -128,6 +128,13 @@ acl = {
   enable_token_persistence = true
 }
 EOF
+
+echo "Consul ENV "
+sudo tee ${CONSUL_ENV_VARS} > /dev/null <<ENVVARS
+FLAGS=-ui -client 0.0.0.0
+CONSUL_HTTP_ADDR=http://127.0.0.1:8500
+ENVVARS
+
 
 echo "--> Writing profile"
 sudo tee /etc/profile.d/consul.sh > /dev/null <<"EOF"
