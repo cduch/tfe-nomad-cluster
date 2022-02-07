@@ -16,6 +16,8 @@ data "template_file" "nomad_server" {
     node_name           = format("${var.server_name}-%02d", count.index +1)
     nomad_version       = var.nomad_version
     nomad_lic           = var.nomad_lic
+    consul_version      = var.consul_version
+    consul_lic          = var.consul_lic
   }
 }
 
