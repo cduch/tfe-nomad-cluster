@@ -155,7 +155,7 @@ ConditionFileNotEmpty=/etc/consul.d/server.hcl
 User=consul
 Group=consul
 EnvironmentFile=/etc/consul.d/consul.conf
-ExecStart=/usr/bin/consul agent -config-dir=/etc/consul.d/ \$FLAGS
+ExecStart=/usr/local/bin/consul agent -config-dir=/etc/consul.d/ \$FLAGS
 ExecReload=/bin/kill --signal HUP \$MAINPID
 KillMode=process
 KillSignal=SIGTERM
