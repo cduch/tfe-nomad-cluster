@@ -138,8 +138,7 @@ ENVVARS
 
 echo "--> Writing profile"
 sudo tee /etc/profile.d/consul.sh > /dev/null <<"EOF"
-export CONSUL_ADDR="http://${node_name}.node.consul:8500"
-export CONSUL_HTTP_ADDR="http://${node_name}.node.consul:8500"
+export CONSUL_HTTP_ADDR=http://127.0.0.1:8500
 EOF
 source /etc/profile.d/consul.sh
 
