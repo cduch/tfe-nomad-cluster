@@ -86,10 +86,81 @@ resource "aws_security_group" "primary" {
   }
 
 
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = [var.whitelist_ip]
+  }
+
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = [var.whitelist_ip]
+  }
+
+
   # Nomad
   ingress {
     from_port   = 4646
     to_port     = 4648
+    protocol    = "tcp"
+    cidr_blocks = [var.whitelist_ip]
+  }
+
+
+  ingress {
+    from_port   = 4648
+    to_port     = 4648
+    protocol    = "udp"
+    cidr_blocks = [var.whitelist_ip]
+  }
+
+
+  ingress {
+    from_port   = 8300
+    to_port     = 8300
+    protocol    = "tcp"
+    cidr_blocks = [var.whitelist_ip]
+  }
+
+
+  ingress {
+    from_port   = 8301
+    to_port     = 8301
+    protocol    = "tcp"
+    cidr_blocks = [var.whitelist_ip]
+  }
+
+  ingress {
+    from_port   = 8301
+    to_port     = 8301
+    protocol    = "udp"
+    cidr_blocks = [var.whitelist_ip]
+  }
+
+
+  ingress {
+    from_port   = 8302
+    to_port     = 8302
+    protocol    = "tcp"
+    cidr_blocks = [var.whitelist_ip]
+  }
+
+
+  ingress {
+    from_port   = 8302
+    to_port     = 8302
+    protocol    = "udp"
+    cidr_blocks = [var.whitelist_ip]
+  }
+
+
+  ingress {
+    from_port   = 8400
+    to_port     = 8400
     protocol    = "tcp"
     cidr_blocks = [var.whitelist_ip]
   }
@@ -99,6 +170,22 @@ resource "aws_security_group" "primary" {
     from_port   = 8500
     to_port     = 8500
     protocol    = "tcp"
+    cidr_blocks = [var.whitelist_ip]
+  }
+
+
+  ingress {
+    from_port   = 8600
+    to_port     = 8600
+    protocol    = "tcp"
+    cidr_blocks = [var.whitelist_ip]
+  }
+
+
+  ingress {
+    from_port   = 8600
+    to_port     = 8600
+    protocol    = "udp"
     cidr_blocks = [var.whitelist_ip]
   }
 
