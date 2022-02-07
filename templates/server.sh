@@ -152,8 +152,8 @@ After=network-online.target
 ConditionFileNotEmpty=/etc/consul.d/server.hcl
 
 [Service]
-User=consul
-Group=consul
+#User=consul
+#Group=consul
 EnvironmentFile=/etc/consul.d/consul.conf
 ExecStart=/usr/local/bin/consul agent -config-dir=/etc/consul.d/ \$FLAGS
 ExecReload=/bin/kill --signal HUP \$MAINPID
