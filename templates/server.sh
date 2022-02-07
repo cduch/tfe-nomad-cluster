@@ -178,5 +178,5 @@ sleep 2
 #####   MAIN   #####
 ####################
 
-[[ $(echo $consul_enabled) = "true" ]] && install_consul
+install_consul
 install_nomad
