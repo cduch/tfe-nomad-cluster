@@ -29,7 +29,7 @@ variable "network_address_space" {
 
 variable "data_dir" {
   description = "Nomad config option"
-  default     = "/opt/nomad"
+  default     = "/opt"
 }
 
 variable "bind_addr" {
@@ -93,4 +93,16 @@ variable "nomad_version" {
   default = "1.2.5+ent"
 }
 
-variable "nomad_lic" {}
+variable "nomad_lic" {
+  default = "NULL"
+}
+
+variable "consul_version" {
+  description = "i.e. 1.2.5 or 1.2.5+ent"
+  default = "1.11.2"
+}
+
+variable "consul_lic" {
+  default = "NULL"
+}
+
