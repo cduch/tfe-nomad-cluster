@@ -1,5 +1,7 @@
 #!/bin/bash
 
+install_nomad() {
+
 cd /tmp
 curl --silent --remote-name https://releases.hashicorp.com/nomad/${nomad_version}/nomad_${nomad_version}_linux_amd64.zip
 unzip nomad_${nomad_version}_linux_amd64.zip
@@ -94,3 +96,7 @@ while [ -z "$(curl -s http://localhost:4646/v1/status/leader)" ]; do
 done
 
 echo "==> Nomad Client is Installed!"
+
+}
+
+install_nomad
