@@ -130,7 +130,7 @@ acl = {
 EOF
 
 echo "Consul ENV "
-sudo tee ${CONSUL_ENV_VARS} > /dev/null <<ENVVARS
+sudo tee /etc/consul.d/consul.conf > /dev/null <<ENVVARS
 FLAGS=-ui -client 0.0.0.0
 CONSUL_HTTP_ADDR=http://127.0.0.1:8500
 ENVVARS
