@@ -68,12 +68,14 @@ Description=Nomad Server
 Documentation=https://www.nomadproject.io/docs/
 Requires=network-online.target
 After=network-online.target
+
 [Service]
 ExecStart=/usr/local/bin/nomad agent -config="/etc/nomad.d"
 ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=SIGINT
 Restart=on-failure
 LimitNOFILE=65536
+
 [Install]
 WantedBy=multi-user.target
 EOF
@@ -163,7 +165,6 @@ LimitNOFILE=65536
 
 [Install]
 WantedBy=multi-user.target
-
 EOF
 
 echo "--> Starting consul"
@@ -173,5 +174,9 @@ sleep 2
 
 }
 
-install_consul
+####################
+#####   MAIN   #####
+####################
+
+[[ $(echo $consul_enabled) = "true" ]] && install_consul
 install_nomad

@@ -18,6 +18,7 @@ data "template_file" "nomad_server" {
     nomad_lic           = var.nomad_lic
     consul_version      = var.consul_version
     consul_lic          = var.consul_lic
+    consul_enabled      = var.consul_enabled
   }
 }
 

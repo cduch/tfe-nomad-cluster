@@ -106,3 +106,6 @@ variable "consul_lic" {
   default = "NULL"
 }
 
+variable "consul_enabled" {
+  default = "true"
+}
