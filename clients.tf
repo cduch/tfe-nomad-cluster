@@ -16,6 +16,9 @@ data "template_file" "nomad_client" {
     nomad_join          = var.tag_value
     node_name           = format("${var.client_name}-%02d", count.index +1)
     nomad_version       = var.nomad_version
+    consul_version      = var.consul_version
+    consul_lic          = var.consul_lic
+    consul_enabled      = var.consul_enabled    
   }
 }
 
