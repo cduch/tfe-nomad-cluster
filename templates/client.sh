@@ -99,4 +99,112 @@ echo "==> Nomad Client is Installed!"
 
 }
 
+install_consul() {
+
+cd /tmp
+curl --silent --remote-name https://releases.hashicorp.com/consul/${consul_version}/consul_${consul_version}_linux_amd64.zip
+unzip consul_${consul_version}_linux_amd64.zip
+chown root:root consul
+mv consul /usr/local/bin/
+echo "--> Writing configuration"
+sudo mkdir -p ${data_dir}/consul
+sudo mkdir -p /etc/consul.d
+sudo echo ${consul_lic} > ${data_dir}/consul/license.hclic
+sudo tee /etc/consul.d/server.hcl > /dev/null <<EOF
+
+#node_name   = "consul-client"
+server       = false
+datacenter   = "${datacenter}"
+data_dir     = "${data_dir}/consul/"
+log_level    = "INFO"
+retry_join   = ["provider=aws tag_key=nomad_join tag_value=${nomad_join}"]
+license_path     = "${data_dir}/consul/license.hclic"
+
+service {
+  id      = "dns"
+  name    = "dns"
+  tags    = ["primary"]
+  address = "localhost"
+  port    = 8600
+  check {
+    id       = "dns"
+    name     = "Consul DNS TCP on port 8600"
+    tcp      = "localhost:8600"
+    interval = "10s"
+    timeout  = "1s"
+  }
+}
+
+
+
+# data_dir = "${data_dir}/consul/"
+
+# server           = true
+# license_path     = "${data_dir}/consul/license.hclic"
+# bootstrap_expect = ${server_count}
+# advertise_addr   = "$(private_ip)" 
+# client_addr      = "0.0.0.0"
+# ui               = true
+# datacenter       = "${datacenter}"
+# retry_join       = ["provider=aws tag_key=nomad_join tag_value=${nomad_join}"]
+# retry_max        = 10
+# retry_interval   = "15s"
+
+acl = {
+  enabled = false
+  default_policy = "allow"
+  enable_token_persistence = true
+}
+EOF
+
+echo "Consul ENV "
+sudo tee /etc/consul.d/consul.conf > /dev/null <<ENVVARS
+FLAGS=-ui -client 0.0.0.0
+CONSUL_HTTP_ADDR=http://127.0.0.1:8500
+ENVVARS
+
+
+echo "--> Writing profile"
+sudo tee /etc/profile.d/consul.sh > /dev/null <<"EOF"
+export CONSUL_HTTP_ADDR=http://127.0.0.1:8500
+EOF
+source /etc/profile.d/consul.sh
+
+echo "--> Generating systemd configuration"
+sudo tee /etc/systemd/system/consul.service > /dev/null <<EOF
+[Unit]
+Description="HashiCorp Consul - A service mesh solution"
+Documentation=https://www.consul.io/
+Requires=network-online.target
+After=network-online.target
+ConditionFileNotEmpty=/etc/consul.d/server.hcl
+
+[Service]
+#User=consul
+#Group=consul
+EnvironmentFile=/etc/consul.d/consul.conf
+ExecStart=/usr/local/bin/consul agent -config-dir=/etc/consul.d/ \$FLAGS
+ExecReload=/bin/kill --signal HUP \$MAINPID
+KillMode=process
+KillSignal=SIGTERM
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+echo "--> Starting consul"
+sudo systemctl enable consul
+sudo systemctl start consul
+sleep 2
+
+
+}
+
+####################
+#####   MAIN   #####
+####################
+
+[[ ${consul_enabled} = "true" ]] && install_consul
 install_nomad
