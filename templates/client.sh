@@ -113,6 +113,7 @@ sudo echo ${consul_lic} > ${data_dir}/consul/license.hclic
 sudo tee /etc/consul.d/server.hcl > /dev/null <<EOF
 
 #node_name   = "consul-client"
+bind_addr    = "$(private_ip)"
 server       = false
 datacenter   = "${datacenter}"
 data_dir     = "${data_dir}/consul/"
