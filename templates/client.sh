@@ -135,21 +135,6 @@ service {
   }
 }
 
-
-
-# data_dir = "${data_dir}/consul/"
-
-# server           = true
-# license_path     = "${data_dir}/consul/license.hclic"
-# bootstrap_expect = ${server_count}
-# advertise_addr   = "$(private_ip)" 
-# client_addr      = "0.0.0.0"
-# ui               = true
-# datacenter       = "${datacenter}"
-# retry_join       = ["provider=aws tag_key=nomad_join tag_value=${nomad_join}"]
-# retry_max        = 10
-# retry_interval   = "15s"
-
 acl = {
   enabled = false
   default_policy = "allow"
