@@ -1,5 +1,5 @@
 
-data "template_file" "nomad_server" {
+data "template_file" "server" {
   count = var.server_count
   template = "${join("\n", tolist([
     file("${path.root}/templates/base.sh"),
@@ -30,11 +30,11 @@ data "template_cloudinit_config" "server" {
   base64_encode = true
   part {
     content_type = "text/x-shellscript"
-    content      = element(data.template_file.nomad_server.*.rendered, count.index)
+    content      = element(data.template_file.server.*.rendered, count.index)
   }
 }
 
-resource "aws_instance" "nomad_server" {
+resource "aws_instance" "server" {
   count                       = var.server_count
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.instance_type
