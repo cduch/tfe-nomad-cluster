@@ -55,11 +55,11 @@ variable "server_count" {
 }
 
 variable "server_name" {
-  default = "nomad-s"
+  default = "hc-stack-srv"
 }
 
 variable "nomad_bootstrap" {
-  default = "true"
+  default = "false"
 }
 
 variable "client" {
@@ -71,7 +71,7 @@ variable "client_count" {
   default     = "3"
 }
 variable "client_name" {
-  default = "nomad-c"
+  default = "nmd-worker"
 }
 variable "tag_key" {
   description = "Server rejoin tag_key to identify nomad servers within a region"
@@ -113,3 +113,9 @@ variable "consul_lic" {
 variable "consul_enabled" {
   default = "true"
 }
+
+variable "nomad_enabled" {
+  default = "true"
+}
+
+

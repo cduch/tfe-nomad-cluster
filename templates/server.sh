@@ -179,4 +179,4 @@ sleep 2
 ####################
 
 [[ ${consul_enabled} = "true" ]] && install_consul
-install_nomad
+[[ ${nomad_enabled} = "true" ]] && install_nomad
