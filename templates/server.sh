@@ -231,7 +231,7 @@ export VAULT_ADDR=https://127.0.0.1:8200
 export VAULT_TOKEN=
 PROFILE
 
-setcap cap_ipc_lock=+ep /usr/local/bin/vault
+#setcap cap_ipc_lock=+ep /usr/local/bin/vault
 
 cat <<EOF >/lib/systemd/system/vault.service
 [Unit]
@@ -246,8 +246,8 @@ ExecStartPre=/sbin/setcap 'cap_ipc_lock=+ep' /usr/local/bin/vault
 ExecStart=/usr/local/bin/vault server -config /etc/vault.d \$FLAGS
 ExecReload=/bin/kill -HUP \$MAINPID
 KillSignal=SIGTERM
-User=vault
-Group=vault
+#User=vault
+#Group=vault
 LimitMEMLOCK=infinity
 [Install]
 WantedBy=multi-user.target
