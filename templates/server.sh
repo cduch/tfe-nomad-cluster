@@ -191,7 +191,7 @@ sudo mkdir -p ${data_dir}/vault
 sudo mkdir -p /etc/vault.d
 sudo echo ${vault_lic} > ${data_dir}/vault/license.hclic
 
-cat <<EOF >/etc/vault.hcl
+sudo tee /etc/vault.d/vault.hcl > /dev/null <<EOF
 # Full configuration options can be found at https://www.vaultproject.io/docs/configuration
 listener "tcp" {
     address = "0.0.0.0:8200"
@@ -221,19 +221,19 @@ EOF
 
 
 
-tee /etc/vault.d/vault.conf > /dev/null <<ENVVARS
+sudo tee /etc/vault.d/vault.conf > /dev/null <<ENVVARS
 #FLAGS=-dev -dev-ha -dev-transactional -dev-root-token-id=root -dev-listen-address=0.0.0.0:8200
 FLAGS=
 ENVVARS
 
-tee /etc/profile.d/vault.sh > /dev/null <<PROFILE
+sudo tee /etc/profile.d/vault.sh > /dev/null <<PROFILE
 export VAULT_ADDR=https://127.0.0.1:8200
 export VAULT_TOKEN=
 PROFILE
 
 #setcap cap_ipc_lock=+ep /usr/local/bin/vault
 
-cat <<EOF >/lib/systemd/system/vault.service
+sudo tee /lib/systemd/system/vault.service > /dev/null <<EOF
 [Unit]
 Description=Vault Agent
 #Requires=consul-online.target
