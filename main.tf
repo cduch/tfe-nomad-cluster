@@ -119,35 +119,52 @@ resource "aws_security_group" "primary" {
   }
 
 
+  # ingress {
+  #   from_port   = 8300
+  #   to_port     = 8300
+  #   protocol    = "tcp"
+  #   cidr_blocks = [var.whitelist_ip]
+  # }
+
+
+  # Vault
+  ingress {
+    from_port   = 8200
+    to_port     = 8202
+    protocol    = "tcp"
+    cidr_blocks = [var.whitelist_ip]
+  }
+
+  # Vault
   ingress {
     from_port   = 8300
-    to_port     = 8300
-    protocol    = "tcp"
-    cidr_blocks = [var.whitelist_ip]
-  }
-
-
-  ingress {
-    from_port   = 8301
-    to_port     = 8301
-    protocol    = "tcp"
-    cidr_blocks = [var.whitelist_ip]
-  }
-
-  ingress {
-    from_port   = 8301
-    to_port     = 8301
-    protocol    = "udp"
-    cidr_blocks = [var.whitelist_ip]
-  }
-
-
-  ingress {
-    from_port   = 8302
     to_port     = 8302
     protocol    = "tcp"
     cidr_blocks = [var.whitelist_ip]
   }
+
+
+  # ingress {
+  #   from_port   = 8301
+  #   to_port     = 8301
+  #   protocol    = "tcp"
+  #   cidr_blocks = [var.whitelist_ip]
+  # }
+
+  # ingress {
+  #   from_port   = 8301
+  #   to_port     = 8301
+  #   protocol    = "udp"
+  #   cidr_blocks = [var.whitelist_ip]
+  # }
+
+
+  # ingress {
+  #   from_port   = 8302
+  #   to_port     = 8302
+  #   protocol    = "tcp"
+  #   cidr_blocks = [var.whitelist_ip]
+  # }
 
 
   ingress {
@@ -257,3 +274,72 @@ data "aws_iam_policy_document" "instance_role" {
   }
 }
 
+#### VAULT CERT AND KMS UNSEAL ####
+
+resource "aws_kms_key" "kms_key_vault" {
+ description             = "Vault KMS key"
+}
+
+resource "tls_private_key" "ca" {
+  algorithm   = "ECDSA"
+  ecdsa_curve = "P384"
+}
+
+resource "tls_self_signed_cert" "ca" {
+  key_algorithm     = "${tls_private_key.ca.algorithm}"
+  private_key_pem   = "${tls_private_key.ca.private_key_pem}"
+  is_ca_certificate = true
+
+  validity_period_hours = 12
+  allowed_uses = [
+    "key_encipherment",
+    "digital_signature",
+    "cert_signing",
+    "server_auth",
+  ]
+  
+  
+  subject {
+    common_name  = "${var.common_name}"
+    organization = "${var.organization}"
+  }
+}
+
+resource "tls_private_key" "vault" {
+  algorithm   = "ECDSA"
+  ecdsa_curve = "P384"
+}
+
+resource "tls_cert_request" "vault" {
+  key_algorithm   = "${tls_private_key.vault.algorithm}"
+  private_key_pem = "${tls_private_key.vault.private_key_pem}"
+  subject {
+    common_name  = "${var.common_name}"
+    organization = "${var.organization}"
+  }
+
+  # dns_names = [
+  #   "*.${var.dns_domain}"
+  #   ]
+  
+
+  ip_addresses   = [
+     "127.0.0.1",
+     aws_instance.server.*.private_ip
+      ]
+}
+
+resource "tls_locally_signed_cert" "vault" {
+  cert_request_pem = tls_cert_request.vault.cert_request_pem
+
+  ca_key_algorithm   = tls_private_key.ca.algorithm
+  ca_private_key_pem = tls_private_key.ca.private_key_pem
+  ca_cert_pem        = tls_self_signed_cert.ca.cert_pem
+
+  validity_period_hours = 12
+  allowed_uses = [
+    "key_encipherment",
+    "digital_signature",
+    "server_auth",
+  ]
+}

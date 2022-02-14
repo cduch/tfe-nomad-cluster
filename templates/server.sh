@@ -13,6 +13,7 @@ echo "--> Writing configuration"
 sudo mkdir -p ${data_dir}/nomad
 sudo mkdir -p /etc/nomad.d
 sudo echo ${nomad_lic} > ${data_dir}/nomad/license.hclic
+
 sudo tee /etc/nomad.d/config.hcl > /dev/null <<EOF
 name            = "${node_name}"
 data_dir        = "${data_dir}/nomad"
@@ -59,6 +60,7 @@ echo "--> Writing profile"
 sudo tee /etc/profile.d/nomad.sh > /dev/null <<"EOF"
 export NOMAD_ADDR="http://${node_name}.node.consul:4646"
 EOF
+
 source /etc/profile.d/nomad.sh
 
 echo "--> Generating systemd configuration"
@@ -105,10 +107,12 @@ curl --silent --remote-name https://releases.hashicorp.com/consul/${consul_versi
 unzip consul_${consul_version}_linux_amd64.zip
 chown root:root consul
 mv consul /usr/local/bin/
+
 echo "--> Writing configuration"
 sudo mkdir -p ${data_dir}/consul
 sudo mkdir -p /etc/consul.d
 sudo echo ${consul_lic} > ${data_dir}/consul/license.hclic
+
 sudo tee /etc/consul.d/server.hcl > /dev/null <<EOF
 data_dir = "${data_dir}/consul/"
 
@@ -174,9 +178,99 @@ sleep 2
 
 }
 
+install_vault() {
+
+cd /tmp
+curl --silent --remote-name https://releases.hashicorp.com/vault/${vault_version}/vault_${vault_version}_linux_amd64.zip
+unzip vault_${vault_version}_linux_amd64.zip
+chown root:root vault
+mv vault /usr/local/bin/
+
+echo "--> Writing configuration"
+sudo mkdir -p ${data_dir}/vault
+sudo mkdir -p /etc/vault.d
+sudo echo ${vault_lic} > ${data_dir}/vault/license.hclic
+
+cat <<EOF >/etc/vault.hcl
+# Full configuration options can be found at https://www.vaultproject.io/docs/configuration
+listener "tcp" {
+    address = "0.0.0.0:8200"
+    cluster_address= "0.0.0.0:8201"
+    tls_cert_file = "/etc/ssl/certs/fullchain.crt"
+    tls_key_file  = "/etc/ssl/certs/privkey.key"
+    #tls_disable = "true"
+}
+storage "raft" {
+    path = "/opt/vault/data"
+    node_id = "${node_name}"
+    retry_join {
+        #leader_tls_servername = "${node_name}.{dns_domain}"
+        leader_tls_servername = "${node_name}"
+        auto_join = "provider=aws tag_key=nomad_join tag_value=${nomad_join}"
+    }
+}
+seal "awskms" {
+  region     = "${region}"
+  kms_key_id = "${kms_key_id}"
+}
+ui = true
+disable_mlock = true
+cluster_addr = "https://$(private_ip):8201"
+api_addr = "https://$(private_ip):8200"
+EOF
+
+
+
+tee /etc/vault.d/vault.conf > /dev/null <<ENVVARS
+#FLAGS=-dev -dev-ha -dev-transactional -dev-root-token-id=root -dev-listen-address=0.0.0.0:8200
+FLAGS=
+ENVVARS
+
+tee /etc/profile.d/vault.sh > /dev/null <<PROFILE
+export VAULT_ADDR=https://127.0.0.1:8200
+export VAULT_TOKEN=
+PROFILE
+
+setcap cap_ipc_lock=+ep /usr/local/bin/vault
+
+cat <<EOF >/lib/systemd/system/vault.service
+[Unit]
+Description=Vault Agent
+#Requires=consul-online.target
+#After=consul-online.target
+[Service]
+Restart=on-failure
+EnvironmentFile=/etc/vault.d/vault.conf
+PermissionsStartOnly=true
+ExecStartPre=/sbin/setcap 'cap_ipc_lock=+ep' /usr/local/bin/vault
+ExecStart=/usr/local/bin/vault server -config /etc/vault.d \$FLAGS
+ExecReload=/bin/kill -HUP \$MAINPID
+KillSignal=SIGTERM
+User=vault
+Group=vault
+LimitMEMLOCK=infinity
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo mkdir --parents /etc/vault.d
+sudo echo "${cert}" > /etc/ssl/certs/fullchain.crt
+sudo echo "${key}" > /etc/ssl/certs/privkey.key
+sudo echo "${ca_cert}" > /etc/ssl/certs/ca.crt
+
+
+
+systemctl enable vault
+systemctl start vault
+#vault operator init
+
+
+}
+
 ####################
 #####   MAIN   #####
 ####################
 
+[[ ${vault_enabled} = "true" ]] && install_vault
 [[ ${consul_enabled} = "true" ]] && install_consul
 [[ ${nomad_enabled} = "true" ]] && install_nomad

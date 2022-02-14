@@ -21,6 +21,12 @@ data "template_file" "server" {
     consul_lic          = var.consul_lic
     consul_enabled      = var.consul_enabled
     nomad_enabled       = var.nomad_enabled
+    vault_version        = var.vault_version
+    vault_enabled        = var.vault_enabled
+    kms_key_id           = aws_kms_key.kms_key_vault.key_id
+    cert                 = tls_locally_signed_cert.vault.cert_pem
+    key                  = tls_private_key.vault.private_key_pem
+    ca_cert              = tls_private_key.ca.public_key_pem
   }
 }
 

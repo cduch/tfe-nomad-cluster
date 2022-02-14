@@ -58,10 +58,6 @@ variable "server_name" {
   default = "hc-stack-srv"
 }
 
-variable "nomad_bootstrap" {
-  default = "false"
-}
-
 variable "client" {
   description = "enable nomad client option?"
   default     = "true"
@@ -101,6 +97,10 @@ variable "nomad_lic" {
   default = "NULL"
 }
 
+variable "nomad_bootstrap" {
+  default = "false"
+}
+
 variable "consul_version" {
   description = "i.e. 1.2.5 or 1.2.5+ent"
   default = "1.11.2+ent"
@@ -118,4 +118,25 @@ variable "nomad_enabled" {
   default = "true"
 }
 
+variable "vault_enabled" {
+  default = "true"
+}
 
+variable "vault_version" {
+  description = "i.e. 1.2.5 or 1.2.5+ent"
+  default = "1.9.3"
+}
+
+variable "vault_lic" {
+  default = "NULL"
+}
+
+variable "common_name" {
+  description = "Cert common name"
+  default     = "vault"
+}
+
+variable "organization" {
+  description = "Cert Organaization"
+  default     = "joestack"
+}
