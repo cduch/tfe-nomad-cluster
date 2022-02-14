@@ -324,8 +324,7 @@ resource "tls_cert_request" "vault" {
   
 
   ip_addresses   = [
-     "127.0.0.1",
-     aws_instance.server.*.private_ip
+     "127.0.0.1"
       ]
 }
 
