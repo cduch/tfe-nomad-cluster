@@ -260,6 +260,33 @@ data "aws_iam_policy_document" "nomad-server" {
     ]
     resources = ["*"]
   }
+
+// Vault additions 
+  statement {
+    sid    = "VaultAWSAuthMethod"
+    effect = "Allow"
+    actions = [
+      "ec2:DescribeInstances",
+      "iam:GetInstanceProfile",
+      "iam:GetUser",
+      "iam:GetRole",
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "VaultKMSUnseal"
+    effect = "Allow"
+
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:DescribeKey",
+    ]
+
+    resources = ["*"]
+  }
+// Vault additions end
 }
 
 data "aws_iam_policy_document" "instance_role" {
