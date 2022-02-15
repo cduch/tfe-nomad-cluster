@@ -52,6 +52,8 @@ autopilot {
 }
 EOF
 
+sudo chown -R nomad:nomad /etc/nomad.d/
+
 echo "--> Writing profile"
 sudo tee /etc/profile.d/nomad.sh > /dev/null <<"EOF"
 export NOMAD_ADDR="http://${node_name}.node.consul:4646"
@@ -109,7 +111,7 @@ sudo echo ${consul_lic} > ${data_dir}/consul/license.hclic
 sudo chown -R consul:consul /opt/consul/
 
 
-sudo tee /etc/consul.d/server.hcl > /dev/null <<EOF
+sudo tee /etc/consul.d/consul.hcl > /dev/null <<EOF
 data_dir = "${data_dir}/consul/"
 
 server           = true
@@ -136,6 +138,7 @@ FLAGS=-ui -client 0.0.0.0
 CONSUL_HTTP_ADDR=http://127.0.0.1:8500
 ENVVARS
 
+sudo chown -R consul:consul /etc/consul.d/
 
 echo "--> Writing profile"
 sudo tee /etc/profile.d/consul.sh > /dev/null <<"EOF"
@@ -184,6 +187,7 @@ sudo apt-get -y install ${vault_apt}=${vault_version}
 sudo echo ${vault_lic} > ${data_dir}/vault/license.hclic
 sudo chown -R vault:vault /opt/vault/
 
+sudo chown -R vault:vault /opt/vault/
 
 sudo tee /etc/vault.d/vault.hcl > /dev/null <<EOF
 # Full configuration options can be found at https://www.vaultproject.io/docs/configuration
@@ -217,6 +221,8 @@ sudo tee /etc/vault.d/vault.conf > /dev/null <<ENVVARS
 #FLAGS=-dev -dev-ha -dev-transactional -dev-root-token-id=root -dev-listen-address=0.0.0.0:8200
 FLAGS=
 ENVVARS
+
+sudo chown -R vault:vault /etc/vault.d/
 
 sudo tee /etc/profile.d/vault.sh > /dev/null <<PROFILE
 export VAULT_ADDR=https://127.0.0.1:8200
