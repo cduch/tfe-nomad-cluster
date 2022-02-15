@@ -119,7 +119,7 @@ variable "nomad_enabled" {
 }
 
 variable "vault_enabled" {
-  default = "true"
+  default = "false"
 }
 
 variable "vault_version" {

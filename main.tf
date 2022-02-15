@@ -261,7 +261,8 @@ data "aws_iam_policy_document" "nomad-server" {
     resources = ["*"]
   }
 
-// Vault additions 
+  
+  
   statement {
     sid    = "VaultAWSAuthMethod"
     effect = "Allow"
@@ -286,7 +287,6 @@ data "aws_iam_policy_document" "nomad-server" {
 
     resources = ["*"]
   }
-// Vault additions end
 }
 
 data "aws_iam_policy_document" "instance_role" {

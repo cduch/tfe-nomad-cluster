@@ -234,7 +234,7 @@ export VAULT_ADDR=https://127.0.0.1:8200
 export VAULT_TOKEN=
 PROFILE
 
-sudo setcap cap_ipc_lock=+ep /usr/bin/vault
+#sudo setcap cap_ipc_lock=+ep /usr/bin/vault
 
 sudo tee /lib/systemd/system/vault.service > /dev/null <<EOF
 [Unit]
