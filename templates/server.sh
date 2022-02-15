@@ -6,7 +6,7 @@ install_nomad_apt() {
 sudo apt-get install -y ${nomad_apt}=${nomad_version}
 sudo echo ${nomad_lic} > ${data_dir}/nomad/license.hclic
 
-sudo tee /etc/nomad.d/config.hcl > /dev/null <<EOF
+sudo tee /etc/nomad.d/nomad.hcl > /dev/null <<EOF
 name            = "${node_name}"
 data_dir        = "${data_dir}/nomad"
 enable_debug    = true

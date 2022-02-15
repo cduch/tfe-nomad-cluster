@@ -15,14 +15,14 @@ output "nomad_client_public_ips" {
 }
 
 
-output "nomad_apt" {
-  value = local.nomad_apt
-}
+# output "nomad_apt" {
+#   value = local.nomad_apt
+# }
 
-output "consul_apt" {
-  value = local.consul_apt
-}
+# output "consul_apt" {
+#   value = local.consul_apt
+# }
 
-output "vault_apt" {
-  value = local.vault_apt
-}
+# output "vault_apt" {
+#   value = local.vault_apt
+# }
