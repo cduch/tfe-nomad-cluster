@@ -8,7 +8,6 @@ locals {
   vault_apt  = length(split("+", var.vault_version)) == 2 ? "vault-enterpise" : "vault"
 }
 
-}
 
 
 
