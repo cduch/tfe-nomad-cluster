@@ -106,6 +106,8 @@ install_consul_apt() {
 
 sudo apt-get install -y ${consul_apt}=${consul_version}
 sudo echo ${consul_lic} > ${data_dir}/consul/license.hclic
+sudo chown -R consul:consul /opt/consul/
+
 
 sudo tee /etc/consul.d/server.hcl > /dev/null <<EOF
 data_dir = "${data_dir}/consul/"
@@ -180,6 +182,8 @@ install_vault_apt() {
 
 sudo apt-get -y install ${vault_apt}=${vault_version}
 sudo echo ${vault_lic} > ${data_dir}/vault/license.hclic
+sudo chown -R vault:vault /opt/vault/
+
 
 sudo tee /etc/vault.d/vault.hcl > /dev/null <<EOF
 # Full configuration options can be found at https://www.vaultproject.io/docs/configuration

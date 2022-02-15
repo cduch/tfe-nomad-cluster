@@ -111,7 +111,7 @@ variable "consul_lic" {
 }
 
 variable "consul_enabled" {
-  default = "false"
+  default = "true"
 }
 
 variable "nomad_enabled" {
