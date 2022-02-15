@@ -16,7 +16,7 @@ apt-get -y update
 
 echo "--> Installing common dependencies"
 apt-get -y install \
-  unzip
+  unzip ntp dnsmask dnsutils
 
 echo "--> Setting hostname..."
 echo "${node_name}" | sudo tee /etc/hostname
@@ -28,3 +28,7 @@ sudo tee -a /etc/hosts > /dev/null <<EOF
 $(private_ip)  ${node_name} ${node_name}.node.consul
 EOF
 
+systemctl enable ntp.service
+systemctl start ntp.service
+systemctl enable dnsmasq
+systemctl restart dnsmasq

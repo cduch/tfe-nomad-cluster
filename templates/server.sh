@@ -258,13 +258,9 @@ sudo echo "${cert}" > /etc/ssl/certs/fullchain.crt
 sudo echo "${key}" > /etc/ssl/certs/privkey.key
 sudo echo "${ca_cert}" > /etc/ssl/certs/ca.crt
 
-
-
 systemctl enable vault
 systemctl start vault
 #vault operator init
-
-
 }
 
 ####################
