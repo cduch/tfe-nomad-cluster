@@ -1,7 +1,7 @@
 locals {
-  nomad_apt  = length(split("+", var.nomad_version)) == 2 ? "nomad-enterpise" : "nomad"
+  nomad_apt  = length(split("+", var.nomad_version)) == 2 ? "nomad-enterprise" : "nomad"
   consul_apt = length(split("+", var.consul_version)) == 2 ? "consul-enterpise" : "consul"
-  vault_apt  = length(split("+", var.vault_version)) == 2 ? "vault-enterpise" : "vault"
+  vault_apt  = length(split("+", var.vault_version)) == 2 ? "vault-enterprise" : "vault"
 }
 
 
