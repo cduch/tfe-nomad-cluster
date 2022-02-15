@@ -90,7 +90,7 @@ variable "root_block_device_size" {
 
 variable "nomad_version" {
   description = "i.e. 1.2.5 or 1.2.5+ent"
-  default = "1.2.6+ent"
+  default = "1.2.5+ent"
 }
 
 variable "nomad_lic" {
