@@ -5,6 +5,7 @@ install_nomad_apt() {
 
 sudo apt-get install -y ${nomad_apt}=${nomad_version}
 sudo echo ${nomad_lic} > ${data_dir}/nomad/license.hclic
+sudo chown -R nomad:nomad /opt/nomad/
 
 sudo tee /etc/nomad.d/nomad.hcl > /dev/null <<EOF
 name            = "${node_name}"
