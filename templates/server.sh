@@ -128,8 +128,8 @@ retry_max        = 10
 retry_interval   = "15s"
 
 acl = {
-  enabled = false
-  default_policy = "allow"
+  enabled = true
+  default_policy = "deny"
   enable_token_persistence = true
 }
 EOF
@@ -231,7 +231,7 @@ export VAULT_ADDR=https://127.0.0.1:8200
 export VAULT_TOKEN=
 PROFILE
 
-#setcap cap_ipc_lock=+ep /usr/local/bin/vault
+sudo setcap cap_ipc_lock=+ep /usr/local/bin/vault
 
 sudo tee /lib/systemd/system/vault.service > /dev/null <<EOF
 [Unit]
