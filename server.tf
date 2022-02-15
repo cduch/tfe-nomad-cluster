@@ -1,8 +1,4 @@
 locals {
-  # nomad_apt  = var.nomad_enabled == "true" && regex("\\+ent", var.nomad_version) ? "nomad-enterpise" : "nomad"
-  # consul_apt = var.consul_enabled == "true" && regex("\\+ent", var.consul_version) ? "consul-enterpise" : "consul"
-  # vault_apt  = var.vault_enabled == "true" && regex("\\+ent", var.vault_version) ? "vault-enterpise" : "vault"
-
   nomad_apt  = length(split("+", var.nomad_version)) == 2 ? "nomad-enterpise" : "nomad"
   consul_apt = length(split("+", var.consul_version)) == 2 ? "consul-enterpise" : "consul"
   vault_apt  = length(split("+", var.vault_version)) == 2 ? "vault-enterpise" : "vault"
@@ -26,20 +22,23 @@ data "template_file" "server" {
     server              = var.server
     nomad_join          = var.tag_value
     node_name           = format("${var.server_name}-%02d", count.index +1)
+    nomad_enabled       = var.nomad_enabled
     nomad_version       = var.nomad_version
+    nomad_apt           = local.nomad_apt
     nomad_lic           = var.nomad_lic
     nomad_bootstrap     = var.nomad_bootstrap
-    consul_version      = var.consul_version
-    consul_lic          = var.consul_lic
     consul_enabled      = var.consul_enabled
-    nomad_enabled       = var.nomad_enabled
-    vault_version        = var.vault_version
-    vault_enabled        = var.vault_enabled
-    vault_lic            = var.vault_lic
-    kms_key_id           = aws_kms_key.kms_key_vault.key_id
-    cert                 = tls_locally_signed_cert.vault.cert_pem
-    key                  = tls_private_key.vault.private_key_pem
-    ca_cert              = tls_private_key.ca.public_key_pem
+    consul_version      = var.consul_version
+    consul_apt          = local.consul_apt
+    consul_lic          = var.consul_lic
+    vault_enabled       = var.vault_enabled
+    vault_version       = var.vault_version
+    vault_apt           = local.vault_apt
+    vault_lic           = var.vault_lic
+    kms_key_id          = aws_kms_key.kms_key_vault.key_id
+    cert                = tls_locally_signed_cert.vault.cert_pem
+    key                 = tls_private_key.vault.private_key_pem
+    ca_cert             = tls_private_key.ca.public_key_pem
   }
 }
 
