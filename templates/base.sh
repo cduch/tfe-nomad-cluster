@@ -32,3 +32,8 @@ systemctl enable ntp.service
 systemctl start ntp.service
 systemctl enable dnsmasq
 systemctl restart dnsmasq
+
+
+curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+sudo apt-get -qq -y update

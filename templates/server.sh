@@ -181,14 +181,17 @@ sleep 2
 install_vault() {
 
 cd /tmp
-curl --silent --remote-name https://releases.hashicorp.com/vault/${vault_version}/vault_${vault_version}_linux_amd64.zip
-unzip vault_${vault_version}_linux_amd64.zip
-chown root:root vault
-mv vault /usr/local/bin/
+# curl --silent --remote-name https://releases.hashicorp.com/vault/${vault_version}/vault_${vault_version}_linux_amd64.zip
+# unzip vault_${vault_version}_linux_amd64.zip
+# chown root:root vault
+# mv vault /usr/local/bin/
 
-echo "--> Writing configuration"
-sudo mkdir -p ${data_dir}/vault
-sudo mkdir -p /etc/vault.d
+apt-get install vault=${vault_version}
+
+
+# echo "--> Writing configuration"
+# sudo mkdir -p ${data_dir}/vault
+# sudo mkdir -p /etc/vault.d
 sudo echo ${vault_lic} > ${data_dir}/vault/license.hclic
 
 sudo tee /etc/vault.d/vault.hcl > /dev/null <<EOF
@@ -231,7 +234,7 @@ export VAULT_ADDR=https://127.0.0.1:8200
 export VAULT_TOKEN=
 PROFILE
 
-sudo setcap cap_ipc_lock=+ep /usr/local/bin/vault
+sudo setcap cap_ipc_lock=+ep /usr/bin/vault
 
 sudo tee /lib/systemd/system/vault.service > /dev/null <<EOF
 [Unit]
@@ -242,12 +245,12 @@ Description=Vault Agent
 Restart=on-failure
 EnvironmentFile=/etc/vault.d/vault.conf
 PermissionsStartOnly=true
-ExecStartPre=/sbin/setcap 'cap_ipc_lock=+ep' /usr/local/bin/vault
-ExecStart=/usr/local/bin/vault server -config /etc/vault.d \$FLAGS
+ExecStartPre=/sbin/setcap 'cap_ipc_lock=+ep' /usr/bin/vault
+ExecStart=/usr/bin/vault server -config /etc/vault.d \$FLAGS
 ExecReload=/bin/kill -HUP \$MAINPID
 KillSignal=SIGTERM
-#User=vault
-#Group=vault
+User=vault
+Group=vault
 LimitMEMLOCK=infinity
 [Install]
 WantedBy=multi-user.target
