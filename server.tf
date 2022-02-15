@@ -1,7 +1,7 @@
 locals {
-  nomad_apt  = var.nomad_enabled == "true" && contains(var.nomad_version, "+ent") ? "nomad-enterpise" : "nomad"
-  consul_apt = var.consul_enabled == "true" && contains(var.consul_version, "+ent") ? "consul-enterpise" : "consul"
-  vault_apt  = var.vault_enabled == "true" && contains(var.vault_version, "+ent") ? "vault-enterpise" : "vault"
+  nomad_apt  = var.nomad_enabled == "true" && regex("\\+ent", var.nomad_version) ? "nomad-enterpise" : "nomad"
+  consul_apt = var.consul_enabled == "true" && regex("\\+ent", var.consul_version) ? "consul-enterpise" : "consul"
+  vault_apt  = var.vault_enabled == "true" && regex("\\+ent", var.vault_version) ? "vault-enterpise" : "vault"
 }
 
 
