@@ -1,3 +1,10 @@
+locals {
+  nomad_apt  = var.nomad_enabled == "true" && contains(var.nomad_version, "+ent") ? "nomad-enterpise" : "nomad"
+  consul_apt = var.consul_enabled == "true" && contains(var.consul_version, "+ent") ? "consul-enterpise" : "consul"
+  vault_apt  = var.vault_enabled == "true" && contains(var.vault_version, "+ent") ? "vault-enterpise" : "vault"
+}
+
+
 
 data "template_file" "server" {
   count = var.server_count
