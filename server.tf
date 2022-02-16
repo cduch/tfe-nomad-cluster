@@ -3,10 +3,11 @@ locals {
   consul_apt = length(split("+", var.consul_version)) == 2 ? "consul-enterprise" : "consul"
   vault_apt  = length(split("+", var.vault_version)) == 2 ? "vault-enterprise" : "vault"
   kms_key_id = var.vault_enabled ? aws_kms_key.vault.0.key_id : "NULL"
+  cert       = var.vault_tls_enabled ? tls_locally_signed_cert.0.vault.cert_pem : "NULL"
+  key        = var.vault_tls_enabled ? tls_private_key.vault.0.private_key_pem : "NULL"
+  ca_cert    = var.vault_tls_enabled ? tls_private_key.ca.0.public_key_pem : "NULL"
+  protocol   = var.vault_tls_enabled ? "https" : "http"
 }
-
-
-
 
 data "template_file" "server" {
   count = var.server_count
@@ -38,9 +39,10 @@ data "template_file" "server" {
     vault_lic           = var.vault_lic
     kms_key_id          = local.kms_key_id
     aws_region          = var.aws_region
-    # cert                = tls_locally_signed_cert.vault.cert_pem
-    # key                 = tls_private_key.vault.private_key_pem
-    # ca_cert             = tls_private_key.ca.public_key_pem
+    protocol            = local.protocol
+    cert                = local.cert 
+    key                 = local.key
+    ca_cert             = local.ca_cert
   }
 }
 
@@ -74,13 +76,6 @@ resource "aws_instance" "server" {
     volume_size           = var.root_block_device_size
     delete_on_termination = "true"
   }
-
-  # ebs_block_device  {
-  #   device_name           = "/dev/xvdd"
-  #   volume_type           = "gp2"
-  #   volume_size           = var.ebs_block_device_size
-  #   delete_on_termination = "true"
-  # }
 
   user_data = element(data.template_cloudinit_config.server.*.rendered, count.index)
 }

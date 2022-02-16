@@ -131,6 +131,11 @@ variable "vault_lic" {
   default = "NULL"
 }
 
+variable "vault_tls_enabled" {
+  descdescription = "If set to true you need to provide common name, organization, and dns_domain as well"
+  default = "true"
+}
+
 variable "common_name" {
   description = "Cert common name"
   default     = "vault"
@@ -139,4 +144,8 @@ variable "common_name" {
 variable "organization" {
   description = "Cert Organaization"
   default     = "joestack"
+}
+
+variable "dns_domain" {
+  default = "joestack.xyz"
 }

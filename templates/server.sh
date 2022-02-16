@@ -229,7 +229,7 @@ ENVVARS
 sudo chown -R vault:vault /etc/vault.d/
 
 sudo tee /etc/profile.d/vault.sh > /dev/null <<PROFILE
-export VAULT_ADDR=https://127.0.0.1:8200
+export VAULT_ADDR=${protocol}://127.0.0.1:8200
 export VAULT_TOKEN=
 PROFILE
 
@@ -255,14 +255,11 @@ LimitMEMLOCK=infinity
 WantedBy=multi-user.target
 EOF
 
-cert="NULL"
-key="NULL"
-ca_cert="NULL"
 
 sudo mkdir --parents /etc/vault.d
-sudo echo "$${cert}" > /etc/ssl/certs/fullchain.crt
-sudo echo "$${key}" > /etc/ssl/certs/privkey.key
-sudo echo "$${ca_cert}" > /etc/ssl/certs/ca.crt
+sudo echo "${cert}" > /etc/ssl/certs/fullchain.crt
+sudo echo "${key}" > /etc/ssl/certs/privkey.key
+sudo echo "${ca_cert}" > /etc/ssl/certs/ca.crt
 
 systemctl enable vault
 systemctl start vault
