@@ -2,6 +2,7 @@ locals {
   nomad_apt  = length(split("+", var.nomad_version)) == 2 ? "nomad-enterprise" : "nomad"
   consul_apt = length(split("+", var.consul_version)) == 2 ? "consul-enterprise" : "consul"
   vault_apt  = length(split("+", var.vault_version)) == 2 ? "vault-enterprise" : "vault"
+  kms_key_id = var.vault_enabled == 1 ? aws_kms_key.vault.0.key_id : "NULL"
 }
 
 
@@ -35,7 +36,7 @@ data "template_file" "server" {
     vault_version       = var.vault_version
     vault_apt           = local.vault_apt
     vault_lic           = var.vault_lic
-    kms_key_id          = aws_kms_key.vault.key_id
+    kms_key_id          = local.kms_key_id
     aws_region          = var.aws_region
     # cert                = tls_locally_signed_cert.vault.cert_pem
     # key                 = tls_private_key.vault.private_key_pem
