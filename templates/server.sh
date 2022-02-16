@@ -154,7 +154,7 @@ Description="HashiCorp Consul - A service mesh solution"
 Documentation=https://www.consul.io/
 Requires=network-online.target
 After=network-online.target
-ConditionFileNotEmpty=/etc/consul.d/server.hcl
+ConditionFileNotEmpty=/etc/consul.d/consul.hcl
 
 [Service]
 User=consul
@@ -185,70 +185,70 @@ sudo echo ${consul_lic} > ${data_dir}/consul/license.hclic
 # sudo chown -R consul:consul /opt/consul/
 
 
-# sudo tee /etc/consul.d/consul.hcl > /dev/null <<EOF
-# data_dir = "${data_dir}/consul/"
+sudo tee /etc/consul.d/consul.hcl > /dev/null <<EOF
+data_dir = "${data_dir}/consul/"
 
-# server           = true
-# license_path     = "${data_dir}/consul/license.hclic"
-# bootstrap_expect = ${server_count}
-# advertise_addr   = "$(private_ip)" 
-# client_addr      = "0.0.0.0"
-# ui               = true
-# datacenter       = "${datacenter}"
-# retry_join       = ["provider=aws tag_key=nomad_join tag_value=${nomad_join}"]
-# retry_max        = 10
-# retry_interval   = "15s"
+server           = true
+license_path     = "${data_dir}/consul/license.hclic"
+bootstrap_expect = ${server_count}
+advertise_addr   = "$(private_ip)" 
+client_addr      = "0.0.0.0"
+ui               = true
+datacenter       = "${datacenter}"
+retry_join       = ["provider=aws tag_key=nomad_join tag_value=${nomad_join}"]
+retry_max        = 10
+retry_interval   = "15s"
 
-# acl = {
-#   enabled = true
-#   default_policy = "deny"
-#   enable_token_persistence = true
-# }
-# EOF
+acl = {
+  enabled = true
+  default_policy = "deny"
+  enable_token_persistence = true
+}
+EOF
 
-# echo "Consul ENV "
-# sudo tee /etc/consul.d/consul.conf > /dev/null <<ENVVARS
-# FLAGS=-ui -client 0.0.0.0
-# CONSUL_HTTP_ADDR=http://127.0.0.1:8500
-# ENVVARS
+echo "Consul ENV "
+sudo tee /etc/consul.d/consul.conf > /dev/null <<ENVVARS
+FLAGS=-ui -client 0.0.0.0
+CONSUL_HTTP_ADDR=http://127.0.0.1:8500
+ENVVARS
 
 # sudo chown -R consul:consul /etc/consul.d/
 
-# echo "--> Writing profile"
-# sudo tee /etc/profile.d/consul.sh > /dev/null <<"EOF"
-# export CONSUL_HTTP_ADDR=http://127.0.0.1:8500
-# EOF
+echo "--> Writing profile"
+sudo tee /etc/profile.d/consul.sh > /dev/null <<"EOF"
+export CONSUL_HTTP_ADDR=http://127.0.0.1:8500
+EOF
 
-# source /etc/profile.d/consul.sh
+source /etc/profile.d/consul.sh
 
-# echo "--> Generating systemd configuration"
-# sudo tee /etc/systemd/system/consul.service > /dev/null <<EOF
-# [Unit]
-# Description="HashiCorp Consul - A service mesh solution"
-# Documentation=https://www.consul.io/
-# Requires=network-online.target
-# After=network-online.target
-# ConditionFileNotEmpty=/etc/consul.d/server.hcl
+echo "--> Generating systemd configuration"
+sudo tee /etc/systemd/system/consul.service > /dev/null <<EOF
+[Unit]
+Description="HashiCorp Consul - A service mesh solution"
+Documentation=https://www.consul.io/
+Requires=network-online.target
+After=network-online.target
+ConditionFileNotEmpty=/etc/consul.d/server.hcl
 
-# [Service]
-# User=consul
-# Group=consul
-# EnvironmentFile=/etc/consul.d/consul.conf
-# ExecStart=/usr/bin/consul agent -config-dir=/etc/consul.d/ \$FLAGS
-# ExecReload=/bin/kill --signal HUP \$MAINPID
-# KillMode=process
-# KillSignal=SIGTERM
-# Restart=on-failure
-# LimitNOFILE=65536
+[Service]
+User=consul
+Group=consul
+EnvironmentFile=/etc/consul.d/consul.conf
+ExecStart=/usr/bin/consul agent -config-dir=/etc/consul.d/ \$FLAGS
+ExecReload=/bin/kill --signal HUP \$MAINPID
+KillMode=process
+KillSignal=SIGTERM
+Restart=on-failure
+LimitNOFILE=65536
 
-# [Install]
-# WantedBy=multi-user.target
-# EOF
+[Install]
+WantedBy=multi-user.target
+EOF
 
-# echo "--> Starting consul"
-# sudo systemctl enable consul
-# sudo systemctl start consul
-# sleep 2
+echo "--> Starting consul"
+sudo systemctl enable consul
+sudo systemctl start consul
+sleep 2
 
 }
 
@@ -303,7 +303,7 @@ PROFILE
 
 #sudo setcap cap_ipc_lock=+ep /usr/bin/vault
 
-sudo tee /lib/systemd/system/vault.service > /dev/null <<EOF
+sudo tee /etc/systemd/system/vault.service > /dev/null <<EOF
 [Unit]
 Description=Vault Agent
 #Requires=consul-online.target
@@ -338,5 +338,5 @@ systemctl start vault
 ####################
 
 [[ ${vault_enabled} = "true" ]] && install_vault_apt
-[[ ${consul_enabled} = "true" ]] && install_consul_apt2
+[[ ${consul_enabled} = "true" ]] && install_consul_apt
 [[ ${nomad_enabled} = "true" ]] && install_nomad_apt
