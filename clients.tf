@@ -41,7 +41,7 @@ resource "aws_instance" "client" {
   associate_public_ip_address = "true"
   vpc_security_group_ids      = [aws_security_group.primary.id]
   key_name                    = var.key_name
-  iam_instance_profile        = aws_iam_instance_profile.nomad_join.name
+  iam_instance_profile        = aws_iam_instance_profile.hc-stack-client.name 
 
   tags = {
     Name     = format("${var.client_name}-%02d", count.index + 1)

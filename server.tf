@@ -35,10 +35,10 @@ data "template_file" "server" {
     vault_version       = var.vault_version
     vault_apt           = local.vault_apt
     vault_lic           = var.vault_lic
-    kms_key_id          = aws_kms_key.kms_key_vault.key_id
-    cert                = tls_locally_signed_cert.vault.cert_pem
-    key                 = tls_private_key.vault.private_key_pem
-    ca_cert             = tls_private_key.ca.public_key_pem
+    kms_key_id          = aws_kms_key.vault.key_id
+    # cert                = tls_locally_signed_cert.vault.cert_pem
+    # key                 = tls_private_key.vault.private_key_pem
+    # ca_cert             = tls_private_key.ca.public_key_pem
   }
 }
 
@@ -60,7 +60,7 @@ resource "aws_instance" "server" {
   associate_public_ip_address = "true"
   vpc_security_group_ids      = [aws_security_group.primary.id]
   key_name                    = var.key_name
-  iam_instance_profile        = aws_iam_instance_profile.nomad_join.name
+  iam_instance_profile        = aws_iam_instance_profile.hc-stack-server.name
 
   tags = {
     Name     = format("${var.server_name}-%02d", count.index + 1)

@@ -1,6 +1,8 @@
 #!/bin/bash
 
-
+########################
+###    NOMAD BLOCK   ###
+########################
 install_nomad_apt() {
 
 sudo apt-get install -y ${nomad_apt}=${nomad_version}
@@ -102,8 +104,9 @@ echo "==> Nomad Server is Installed!"
 }
 
 
-
-
+########################
+###   CONSUL BLOCK   ###
+########################
 install_consul_apt() {
 
 sudo apt-get install -y ${consul_apt}=${consul_version}
@@ -178,80 +181,9 @@ sleep 2
 
 }
 
-install_consul_apt2() {
-
-sudo apt-get install -y ${consul_apt}=${consul_version}
-sudo echo ${consul_lic} > ${data_dir}/consul/license.hclic
-# sudo chown -R consul:consul /opt/consul/
-
-
-sudo tee /etc/consul.d/consul.hcl > /dev/null <<EOF
-data_dir = "${data_dir}/consul/"
-
-server           = true
-license_path     = "${data_dir}/consul/license.hclic"
-bootstrap_expect = ${server_count}
-advertise_addr   = "$(private_ip)" 
-client_addr      = "0.0.0.0"
-ui               = true
-datacenter       = "${datacenter}"
-retry_join       = ["provider=aws tag_key=nomad_join tag_value=${nomad_join}"]
-retry_max        = 10
-retry_interval   = "15s"
-
-acl = {
-  enabled = true
-  default_policy = "deny"
-  enable_token_persistence = true
-}
-EOF
-
-echo "Consul ENV "
-sudo tee /etc/consul.d/consul.conf > /dev/null <<ENVVARS
-FLAGS=-ui -client 0.0.0.0
-CONSUL_HTTP_ADDR=http://127.0.0.1:8500
-ENVVARS
-
-# sudo chown -R consul:consul /etc/consul.d/
-
-echo "--> Writing profile"
-sudo tee /etc/profile.d/consul.sh > /dev/null <<"EOF"
-export CONSUL_HTTP_ADDR=http://127.0.0.1:8500
-EOF
-
-source /etc/profile.d/consul.sh
-
-echo "--> Generating systemd configuration"
-sudo tee /etc/systemd/system/consul.service > /dev/null <<EOF
-[Unit]
-Description="HashiCorp Consul - A service mesh solution"
-Documentation=https://www.consul.io/
-Requires=network-online.target
-After=network-online.target
-ConditionFileNotEmpty=/etc/consul.d/server.hcl
-
-[Service]
-User=consul
-Group=consul
-EnvironmentFile=/etc/consul.d/consul.conf
-ExecStart=/usr/bin/consul agent -config-dir=/etc/consul.d/ \$FLAGS
-ExecReload=/bin/kill --signal HUP \$MAINPID
-KillMode=process
-KillSignal=SIGTERM
-Restart=on-failure
-LimitNOFILE=65536
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-echo "--> Starting consul"
-sudo systemctl enable consul
-sudo systemctl start consul
-sleep 2
-
-}
-
+########################
+###    VAULT BLOCK   ###
+########################
 
 install_vault_apt() {
 
@@ -274,15 +206,15 @@ storage "raft" {
     path = "/opt/vault/data"
     node_id = "${node_name}"
     retry_join {
-        #leader_tls_servername = "${node_name}.{dns_domain}"
-        #leader_tls_servername = "${node_name}"
         auto_join = "provider=aws tag_key=nomad_join tag_value=${nomad_join}"
     }
 }
-# seal "awskms" {
-#   region     = "${region}"
-#   kms_key_id = "${kms_key_id}"
-# }
+
+seal "awskms" {
+  region     = "${region}"
+  kms_key_id = "${kms_key_id}"
+}
+
 ui = true
 disable_mlock = true
 cluster_addr = "https://$(private_ip):8201"
