@@ -334,6 +334,7 @@ sudo chown -R nomad:nomad /etc/nomad.d/
 
 echo "--> Writing profile"
 sudo tee /etc/profile.d/nomad.sh > /dev/null <<"EOF"
+export NOMAD_LICENSE_PATH="${data_dir}/nomad/license.hclic"
 export NOMAD_ADDR="http://${node_name}.node.consul:4646"
 EOF
 
