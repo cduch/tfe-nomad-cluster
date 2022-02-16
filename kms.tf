@@ -14,5 +14,5 @@ resource "aws_kms_key" "vault" {
 resource "aws_kms_alias" "vault" {
   count = var.vault_enabled == 1 ? 1 : 0
   name          = "alias/${var.name}-vault-kms-unseal-key"
-  target_key_id = aws_kms_key.vault.key_id[count.index]
+  target_key_id = aws_kms_key.vault.*.key_id[count.index]
 }
