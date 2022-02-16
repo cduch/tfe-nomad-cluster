@@ -196,21 +196,21 @@ listener "tcp" {
     cluster_address= "0.0.0.0:8201"
     tls_cert_file = "/etc/ssl/certs/fullchain.crt"
     tls_key_file  = "/etc/ssl/certs/privkey.key"
-    #tls_disable = "true"
+    tls_disable = "true"
 }
 storage "raft" {
     path = "/opt/vault/data"
     node_id = "${node_name}"
     retry_join {
         #leader_tls_servername = "${node_name}.{dns_domain}"
-        leader_tls_servername = "${node_name}"
+        #leader_tls_servername = "${node_name}"
         auto_join = "provider=aws tag_key=nomad_join tag_value=${nomad_join}"
     }
 }
-seal "awskms" {
-  region     = "${region}"
-  kms_key_id = "${kms_key_id}"
-}
+# seal "awskms" {
+#   region     = "${region}"
+#   kms_key_id = "${kms_key_id}"
+# }
 ui = true
 disable_mlock = true
 cluster_addr = "https://$(private_ip):8201"
