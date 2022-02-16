@@ -200,7 +200,7 @@ listener "tcp" {
     cluster_address= "0.0.0.0:8201"
     tls_cert_file = "/etc/ssl/certs/fullchain.crt"
     tls_key_file  = "/etc/ssl/certs/privkey.key"
-    tls_disable = "true"
+    tls_disable = "${tls_disable}"
 }
 storage "raft" {
     path = "/opt/vault/data"

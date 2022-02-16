@@ -7,6 +7,7 @@ locals {
   key        = var.vault_tls_enabled ? tls_private_key.vault.0.private_key_pem : "NULL"
   ca_cert    = var.vault_tls_enabled ? tls_private_key.ca.0.public_key_pem : "NULL"
   protocol   = var.vault_tls_enabled ? "https" : "http"
+  tls_disable = var.vault_tls_enabled ? "false" : "true"
 }
 
 data "template_file" "server" {
@@ -40,6 +41,7 @@ data "template_file" "server" {
     kms_key_id          = local.kms_key_id
     aws_region          = var.aws_region
     protocol            = local.protocol
+    tls_disable         = local.tls_disable
     cert                = local.cert 
     key                 = local.key
     ca_cert             = local.ca_cert
