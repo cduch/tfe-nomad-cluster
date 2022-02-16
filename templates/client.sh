@@ -282,7 +282,7 @@ install_nomad_apt() {
 sudo apt-get install -y ${nomad_apt}=${nomad_version}
 sudo chown -R nomad:nomad /opt/nomad/
 
-sudo tee /etc/nomad.d/config.hcl > /dev/null <<EOF
+sudo tee /etc/nomad.d/nomad.hcl > /dev/null <<EOF
 name            = "${node_name}"
 data_dir        = "${data_dir}"
 enable_debug    = true
