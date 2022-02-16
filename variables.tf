@@ -132,7 +132,7 @@ variable "vault_lic" {
 }
 
 variable "vault_tls_enabled" {
-  descdescription = "If set to true you need to provide common name, organization, and dns_domain as well"
+  description = "If set to true you need to provide common name, organization, and dns_domain as well"
   default = "true"
 }
 
