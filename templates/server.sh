@@ -211,7 +211,7 @@ storage "raft" {
 }
 
 seal "awskms" {
-  region     = "${region}"
+  region     = "${aws_region}"
   kms_key_id = "${kms_key_id}"
 }
 

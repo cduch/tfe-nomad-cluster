@@ -36,6 +36,7 @@ data "template_file" "server" {
     vault_apt           = local.vault_apt
     vault_lic           = var.vault_lic
     kms_key_id          = aws_kms_key.vault.key_id
+    aws_region          = var.aws_region
     # cert                = tls_locally_signed_cert.vault.cert_pem
     # key                 = tls_private_key.vault.private_key_pem
     # ca_cert             = tls_private_key.ca.public_key_pem
