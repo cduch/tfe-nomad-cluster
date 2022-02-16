@@ -2,7 +2,7 @@ locals {
   nomad_apt  = length(split("+", var.nomad_version)) == 2 ? "nomad-enterprise" : "nomad"
   consul_apt = length(split("+", var.consul_version)) == 2 ? "consul-enterprise" : "consul"
   vault_apt  = length(split("+", var.vault_version)) == 2 ? "vault-enterprise" : "vault"
-  kms_key_id = var.vault_enabled == 1 ? aws_kms_key.vault.0.key_id : "NULL"
+  kms_key_id = var.vault_enabled ? aws_kms_key.vault.0.key_id : "NULL"
 }
 
 
