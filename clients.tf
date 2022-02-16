@@ -15,8 +15,12 @@ data "template_file" "client" {
     client              = var.client
     nomad_join          = var.tag_value
     node_name           = format("${var.client_name}-%02d", count.index +1)
+    nomad_enabled       = var.nomad_enabled
     nomad_version       = var.nomad_version
+    nomad_apt           = local.nomad_apt
+    consul_enabled      = var.consul_enabled
     consul_version      = var.consul_version
+    consul_apt          = local.consul_apt
     consul_lic          = var.consul_lic
     consul_enabled      = var.consul_enabled
     nomad_enabled       = var.nomad_enabled    
