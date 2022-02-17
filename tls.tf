@@ -42,14 +42,15 @@ resource "tls_cert_request" "vault" {
   }
 
   dns_names = [
-    "*.${var.dns_domain}"
+    "*.${var.dns_domain}",
+    "${var.dns_domain}",
+    "${var.server_name}*"
     ]
   
 
-  ip_addresses   = [
-     "127.0.0.1",
-     "${var.network_address_space}"
-      ]
+  # ip_addresses   = [
+  #    "127.0.0.1"
+  #     ]
 }
 
 resource "tls_locally_signed_cert" "vault" {
