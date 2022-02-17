@@ -273,10 +273,21 @@ systemctl start vault
 #vault operator init
 }
 
+add_consul_to_vault() {
+
+sudo tee /etc/vault.d/service-consul.hcl > /dev/null <<EOF
+service_registration "consul" {
+  address = "localhost:8500"
+}
+EOF
+sudo chown -R vault:vault /etc/vault.d/
+}
+
 ####################
 #####   MAIN   #####
 ####################
 
-[[ ${vault_enabled} = "true" ]] && install_vault_apt
 [[ ${consul_enabled} = "true" ]] && install_consul_apt
+[[ ${vault_enabled} = "true" ]] && install_vault_apt 
+[[ ${vault_enabled} = "true" ]] && add_consul_to_vault 
 [[ ${nomad_enabled} = "true" ]] && install_nomad_apt

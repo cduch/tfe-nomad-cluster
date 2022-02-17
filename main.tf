@@ -4,12 +4,6 @@ provider "aws" {
 
 data "aws_availability_zones" "available" {}
 
-# locals {
-#   mod_az = length(data.aws_availability_zones.available.names)
-#   #mod_az = length(split(",", join(", ",data.aws_availability_zones.available.names)))
-# }
-
-
 data "aws_ami" "ubuntu" {
   most_recent = true
 
@@ -67,145 +61,12 @@ resource "aws_subnet" "nomad_subnet" {
   vpc_id                  = aws_vpc.hashicorp_vpc.id
   cidr_block              = cidrsubnet(var.network_address_space, 8, count.index + 1)
   map_public_ip_on_launch = "true"
-  #availability_zone       = data.aws_availability_zones.available.names[count.index % local.mod_az]
   availability_zone       = element(data.aws_availability_zones.available.names, count.index) 
 
   tags = {
     Name = "${var.name}-subnet"
   }
 }
-
-# resource "aws_security_group" "primary" {
-#   name   = var.name
-#   vpc_id = aws_vpc.hashicorp_vpc.id
-
-#   ingress {
-#     from_port   = 22
-#     to_port     = 22
-#     protocol    = "tcp"
-#     cidr_blocks = [var.whitelist_ip]
-#   }
-
-
-#   ingress {
-#     from_port   = 80
-#     to_port     = 80
-#     protocol    = "tcp"
-#     cidr_blocks = [var.whitelist_ip]
-#   }
-
-
-#   ingress {
-#     from_port   = 443
-#     to_port     = 443
-#     protocol    = "tcp"
-#     cidr_blocks = [var.whitelist_ip]
-#   }
-
-
-#   # Nomad
-#   ingress {
-#     from_port   = 4646
-#     to_port     = 4648
-#     protocol    = "tcp"
-#     cidr_blocks = [var.whitelist_ip]
-#   }
-
-
-#   ingress {
-#     from_port   = 4648
-#     to_port     = 4648
-#     protocol    = "udp"
-#     cidr_blocks = [var.whitelist_ip]
-#   }
-
-
-#   # ingress {
-#   #   from_port   = 8300
-#   #   to_port     = 8300
-#   #   protocol    = "tcp"
-#   #   cidr_blocks = [var.whitelist_ip]
-#   # }
-
-
-#   # Vault
-#   ingress {
-#     from_port   = 8200
-#     to_port     = 8202
-#     protocol    = "tcp"
-#     cidr_blocks = [var.whitelist_ip]
-#   }
-
-#   # Vault
-#   ingress {
-#     from_port   = 8300
-#     to_port     = 8302
-#     protocol    = "tcp"
-#     cidr_blocks = [var.whitelist_ip]
-#   }
-
-#   ingress {
-#     from_port   = 8302
-#     to_port     = 8302
-#     protocol    = "udp"
-#     cidr_blocks = [var.whitelist_ip]
-#   }
-
-
-#   ingress {
-#     from_port   = 8400
-#     to_port     = 8400
-#     protocol    = "tcp"
-#     cidr_blocks = [var.whitelist_ip]
-#   }
-
-#   # Consul
-#   ingress {
-#     from_port   = 8500
-#     to_port     = 8500
-#     protocol    = "tcp"
-#     cidr_blocks = [var.whitelist_ip]
-#   }
-
-
-#   ingress {
-#     from_port   = 8600
-#     to_port     = 8600
-#     protocol    = "tcp"
-#     cidr_blocks = [var.whitelist_ip]
-#   }
-
-
-#   ingress {
-#     from_port   = 8600
-#     to_port     = 8600
-#     protocol    = "udp"
-#     cidr_blocks = [var.whitelist_ip]
-#   }
-
-#   # Consul
-#   ingress {
-#     from_port   = 20000
-#     to_port     = 29999
-#     protocol    = "tcp"
-#     cidr_blocks = [var.whitelist_ip]
-#   }
-#   # Consul
-#   ingress {
-#     from_port   = 30000
-#     to_port     = 39999
-#     protocol    = "tcp"
-#     cidr_blocks = [var.whitelist_ip]
-#   }
-
-#   egress {
-#     from_port   = 0
-#     to_port     = 0
-#     protocol    = "-1"
-#     cidr_blocks = ["0.0.0.0/0"]
-#   }
-
-# }
 
 
 ###############################
