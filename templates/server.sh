@@ -54,11 +54,17 @@ autopilot {
 }
 EOF
 
+echo "Nomad ENV "
+sudo tee /etc/nomad.d/nomad.conf > /dev/null <<ENVVARS
+NOMAD_ADDR=http://127.0.0.1:4646
+ENVVARS
+
 sudo chown -R nomad:nomad /etc/nomad.d/
 
 echo "--> Writing profile"
 sudo tee /etc/profile.d/nomad.sh > /dev/null <<"EOF"
-export NOMAD_ADDR="http://${node_name}.node.consul:4646"
+#export NOMAD_ADDR="http://${node_name}.node.consul:4646"
+export NOMAD_ADDR=http://127.0.0.1:4646
 EOF
 
 source /etc/profile.d/nomad.sh
@@ -74,6 +80,7 @@ After=network-online.target
 [Service]
 User=nomad
 Group=nomad
+EnvironmentFile=/etc/nomad.d/nomad.conf
 ExecStart=/usr/bin/nomad agent -config="/etc/nomad.d"
 ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=SIGINT
