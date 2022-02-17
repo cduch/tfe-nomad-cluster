@@ -213,6 +213,7 @@ storage "raft" {
     path = "/opt/vault/data"
     node_id = "${node_name}"
     retry_join {
+        leader_tls_servername = "${node_name}.${dns_domain}"
         auto_join = "provider=aws tag_key=nomad_join tag_value=${nomad_join}"
     }
 }

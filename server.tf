@@ -45,6 +45,7 @@ data "template_file" "server" {
     cert                = local.cert 
     key                 = local.key
     ca_cert             = local.ca_cert
+    dns_domain          = var.dns_domain
   }
 }
 
