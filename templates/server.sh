@@ -289,5 +289,5 @@ sudo chown -R vault:vault /etc/vault.d/
 
 [[ ${consul_enabled} = "true" ]] && install_consul_apt
 [[ ${vault_enabled} = "true" ]] && install_vault_apt 
-[[ ${vault_enabled} = "true" ]] && add_consul_to_vault 
+#[[ ${vault_enabled} = "true" ]] && add_consul_to_vault 
 [[ ${nomad_enabled} = "true" ]] && install_nomad_apt
