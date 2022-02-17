@@ -3,17 +3,13 @@ variable "aws_region" {
   default     = "eu-west-1"
 }
 
-variable "whitelist_ip" {
-  default = "0.0.0.0/0"
-}
-
 variable "instance_type" {
-  description = "type of EC2 instance to provision."
+  description = "type of EC2 instance to provision (Server and Client Nodes)."
   default     = "t2.small"
 }
 
 variable "name" {
-  description = "name to pass to Name tag"
+  description = "Environment name to pass to Name tag"
   default     = "js-nomad"
 }
 
@@ -22,13 +18,17 @@ variable "key_name" {
   default     = "joestack"
 }
 
+variable "whitelist_ip" {
+  default = "0.0.0.0/0"
+}
+
 variable "network_address_space" {
   description = "The default CIDR to use"
   default     = "172.16.0.0/16"
 }
 
 variable "data_dir" {
-  description = "Nomad config option"
+  description = "Nomad, Consul, Vault config option"
   default     = "/opt"
 }
 
@@ -43,7 +43,6 @@ variable "datacenter" {
 variable "region" {
   default = "global"
 }
-
 
 variable "server" {
   description = "enable nomad as server option?"
@@ -70,23 +69,22 @@ variable "client_name" {
   default = "nmd-worker"
 }
 variable "tag_key" {
-  description = "Server rejoin tag_key to identify nomad servers within a region"
+  description = "Server rejoin tag_key to identify servers within a region"
   default     = "js_nomad_tag"
 }
 
 variable "tag_value" {
-  description = "Server rejoin tag_value to identify nomad servers within a region"
+  description = "Server rejoin tag_value to identify servers within a region"
   default     = "js_nomad_value"
 }
-
 
 variable "root_block_device_size" {
   default = "80"
 }
 
-# variable "ebs_block_device_size" {
-#   default = "60"
-# }
+variable "nomad_enabled" {
+  default = "true"
+}
 
 variable "nomad_version" {
   description = "i.e. 1.2.5 or 1.2.5+ent"
@@ -101,8 +99,12 @@ variable "nomad_bootstrap" {
   default = "false"
 }
 
+variable "consul_enabled" {
+  default = "true"
+}
+
 variable "consul_version" {
-  description = "i.e. 1.2.5 or 1.2.5+ent"
+  description = "i.e. 1.11.2 or 1.11.2+ent"
   default = "1.11.2+ent"
 }
 
@@ -110,20 +112,12 @@ variable "consul_lic" {
   default = "NULL"
 }
 
-variable "consul_enabled" {
-  default = "true"
-}
-
-variable "nomad_enabled" {
-  default = "true"
-}
-
 variable "vault_enabled" {
   default = "true"
 }
 
 variable "vault_version" {
-  description = "i.e. 1.2.5 or 1.2.5+ent"
+  description = "i.e. 1.9.3 or 1.9.3+ent"
   default = "1.9.3"
 }
 
