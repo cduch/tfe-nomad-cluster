@@ -84,5 +84,5 @@ resource "aws_route53_record" "server" {
   name    = lookup(aws_instance.server.*.tags[count.index], "Name")
   type    = "A"
   ttl     = "300"
-  records = [element(aws_instance.server.*.private_ip, count.index )]
+  records = [element(aws_instance.server.*.public_ip, count.index )]
 }
