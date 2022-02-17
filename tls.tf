@@ -49,8 +49,7 @@ resource "tls_cert_request" "vault" {
   
 
   ip_addresses   = [
-     "127.0.0.1",
-     "${aws_instance.server[0].private_ip}"
+     "127.0.0.1"
       ]
 }
 
@@ -68,4 +67,22 @@ resource "tls_locally_signed_cert" "vault" {
     "digital_signature",
     "server_auth",
   ]
+}
+
+##
+## TODO: ADD COUNT
+
+data "aws_route53_zone" "selected" {
+  name         = "${var.dns_domain}."
+  private_zone = false
+}
+
+
+resource "aws_route53_record" "server" {
+  count   = var.server_count
+  zone_id = data.aws_route53_zone.selected.zone_id
+  name    = lookup(aws_instance.server.*.tags[count.index], "Name")
+  type    = "A"
+  ttl     = "300"
+  records = [element(aws_instance.server.*.private_ip, count.index )]
 }
