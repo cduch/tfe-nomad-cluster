@@ -67,7 +67,8 @@ resource "aws_subnet" "nomad_subnet" {
   vpc_id                  = aws_vpc.hashicorp_vpc.id
   cidr_block              = cidrsubnet(var.network_address_space, 8, count.index + 1)
   map_public_ip_on_launch = "true"
-  availability_zone       = data.aws_availability_zones.available.names[count.index % local.mod_az]
+  #availability_zone       = data.aws_availability_zones.available.names[count.index % local.mod_az]
+  availability_zone       = element(data.aws_availability_zones.available.names, count.index) 
 
   tags = {
     Name = "${var.name}-subnet"
