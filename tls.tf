@@ -46,9 +46,10 @@ resource "tls_cert_request" "vault" {
     ]
   
 
-  # ip_addresses   = [
-  #    "127.0.0.1"
-  #     ]
+  ip_addresses   = [
+     "127.0.0.1",
+     "${var.network_address_space}"
+      ]
 }
 
 resource "tls_locally_signed_cert" "vault" {
