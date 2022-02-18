@@ -284,6 +284,12 @@ EOF
 sudo chown -R vault:vault /etc/vault.d/
 }
 
+additionals() {
+
+sudo apt-get -y install consul-template
+
+}
+
 ####################
 #####   MAIN   #####
 ####################
@@ -292,3 +298,4 @@ sudo chown -R vault:vault /etc/vault.d/
 [[ ${vault_enabled} = "true" ]] && install_vault_apt 
 #[[ ${vault_enabled} = "true" ]] && add_consul_to_vault 
 [[ ${nomad_enabled} = "true" ]] && install_nomad_apt
+additionals

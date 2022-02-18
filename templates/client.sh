@@ -188,6 +188,11 @@ done
 echo "==> Nomad Client is Installed!"
 }
 
+additionals() {
+
+sudo apt-get -y install consul-template vault
+
+}
 
 ####################
 #####   MAIN   #####
@@ -195,3 +200,4 @@ echo "==> Nomad Client is Installed!"
 
 [[ ${consul_enabled} = "true" ]] && install_consul_apt
 [[ ${nomad_enabled} = "true" ]] && install_nomad_apt
+additionals
