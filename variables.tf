@@ -92,6 +92,7 @@ variable "nomad_version" {
 }
 
 variable "nomad_lic" {
+  descrdescription = "You must be mad to assign sensitive values to a variable here! Use one of the other options"
   default = "NULL"
 }
 
@@ -109,6 +110,7 @@ variable "consul_version" {
 }
 
 variable "consul_lic" {
+  descrdescription = "You must be mad to assign sensitive values to a variable here! Use one of the other options"
   default = "NULL"
 }
 
@@ -122,12 +124,13 @@ variable "vault_version" {
 }
 
 variable "vault_lic" {
-  default = "NULL"
+  descrdescription = "You must be mad to assign sensitive values to a variable here! Use one of the other options"
+  default          = "NULL"
 }
 
 variable "vault_tls_enabled" {
   description = "If set to true you need to provide common name, organization, and dns_domain as well"
-  default = "true"
+  default     = "true"
 }
 
 variable "common_name" {
@@ -141,5 +144,6 @@ variable "organization" {
 }
 
 variable "dns_domain" {
-  default = "joestack.xyz"
+  description = "The Route53 Zone to assign DNS records to"
+  default     = "joestack.xyz"
 }

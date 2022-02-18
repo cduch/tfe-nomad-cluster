@@ -285,9 +285,30 @@ sudo chown -R vault:vault /etc/vault.d/
 }
 
 additionals() {
-
 sudo apt-get -y install consul-template
+}
 
+tutorial() {
+  sudo tee ~/readme.txt > /dev/null <<EOF
+  01: Initialize the Vault cluster
+   vault operator init
+
+  create some policies
+  create a PKI secrets engine
+
+  bootstrap consul
+  create some policies
+  create a consul secrets engine
+
+  bootstrap nomad
+  crete some policies
+  create a nomad secrets engine
+
+  adding consul service registry to Vault
+  
+  some basic nomad jobs
+EOF
+  
 }
 
 ####################
@@ -299,3 +320,4 @@ sudo apt-get -y install consul-template
 #[[ ${vault_enabled} = "true" ]] && add_consul_to_vault 
 [[ ${nomad_enabled} = "true" ]] && install_nomad_apt
 additionals
+tutorial
