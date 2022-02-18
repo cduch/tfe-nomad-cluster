@@ -92,7 +92,7 @@ variable "nomad_version" {
 }
 
 variable "nomad_lic" {
-  descrdescription = "You must be mad to assign sensitive values to a variable here! Use one of the other options"
+  description = "You must be mad to assign sensitive values to a variable here! Use one of the other options"
   default = "NULL"
 }
 
@@ -110,7 +110,7 @@ variable "consul_version" {
 }
 
 variable "consul_lic" {
-  descrdescription = "You must be mad to assign sensitive values to a variable here! Use one of the other options"
+  description = "You must be mad to assign sensitive values to a variable here! Use one of the other options"
   default = "NULL"
 }
 
@@ -124,7 +124,7 @@ variable "vault_version" {
 }
 
 variable "vault_lic" {
-  descrdescription = "You must be mad to assign sensitive values to a variable here! Use one of the other options"
+  description = "You must be mad to assign sensitive values to a variable here! Use one of the other options"
   default          = "NULL"
 }
 
