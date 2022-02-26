@@ -225,8 +225,12 @@ seal "awskms" {
 
 ui = true
 disable_mlock = true
-cluster_addr = "https://$(private_ip):8201"
-api_addr = "https://${node_name}.${dns_domain}:8200"
+#cluster_addr = "https://$(private_ip):8201"
+#cluster_addr = "https://${node_name}.${dns_domain}:8201"
+#api_addr = "https://${node_name}.${dns_domain}:8200"
+cluster_addr = "${protocol}://${node_name}.${dns_domain}:8201"
+api_addr = "${protocol}://${node_name}.${dns_domain}:8200"
+
 EOF
 
 sudo tee /etc/vault.d/vault.conf > /dev/null <<ENVVARS
