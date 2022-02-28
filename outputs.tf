@@ -18,7 +18,7 @@ locals {
   cert-san = [for f in chunklist(["01", "02", "03", "04", "05"], var.server_count): 
   {
     value = f
-    something_else = "foobar-${f}"
+    something_else = "${f}"
   }
   ]
 }
