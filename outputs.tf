@@ -17,8 +17,9 @@ output "nomad_client_public_ips" {
 locals {
   cert-san = [for f in range(01, var.server_count +1): 
   {
-    value = f
-    something_else = "${f}"
+    #value = f
+    #something_else = "${f}"
+    foo = "${var.sever_name}-0${f}"
   }
   ]
 }
