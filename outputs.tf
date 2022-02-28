@@ -28,7 +28,7 @@ locals {
 
 
 output "certs4" {
-  value = local.cert-san.foo
+  value = local.cert-san[foo]
 }
 
 # output "nomad_apt" {
