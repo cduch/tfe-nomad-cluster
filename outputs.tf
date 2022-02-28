@@ -19,7 +19,7 @@ locals {
   {
     #value = f
     #something_else = "${f}"
-    foo = "${var.sever_name}-0${f}"
+    foo = "${var.server_name}-0${f}"
   }
   ]
 }
