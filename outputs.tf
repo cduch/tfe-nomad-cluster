@@ -28,7 +28,7 @@ locals {
 
 
 output "certs4" {
-  value = local.cert-san
+  value = tolist(local.cert-san)
 }
 
 # output "nomad_apt" {
