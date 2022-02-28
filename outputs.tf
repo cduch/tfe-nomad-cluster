@@ -14,6 +14,18 @@ output "nomad_client_public_ips" {
   value = aws_instance.client[*].public_ip
 }
 
+locals {
+  cert-san = [for f in var.server_count : 
+  {
+    value = f
+    something_else = "foobar-${f}"
+  }
+  ]
+}
+
+output "certs4" {
+  value = local.cert-san
+}
 
 # output "nomad_apt" {
 #   value = local.nomad_apt
