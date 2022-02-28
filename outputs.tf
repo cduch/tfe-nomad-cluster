@@ -15,7 +15,7 @@ output "nomad_client_public_ips" {
 }
 
 locals {
-  cert-san = [for f in range(01, var.server_count +1): 
+  cert-san = [for f in range(1, var.server_count +1): 
   {
     #value = f
     #something_else = "${f}"
@@ -24,8 +24,11 @@ locals {
   ]
 }
 
+#format("${var.server_name}-%02d", count.index + 1)
+
+
 output "certs4" {
-  value = local.cert-san
+  value = local.cert-san.foo
 }
 
 # output "nomad_apt" {

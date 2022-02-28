@@ -34,23 +34,23 @@ resource "tls_private_key" "vault" {
 
 resource "tls_cert_request" "vault" {
     count = var.vault_tls_enabled ? 1 : 0
-  key_algorithm   = tls_private_key.vault[count.index].algorithm
-  private_key_pem = tls_private_key.vault[count.index].private_key_pem
-  subject {
-    common_name  = var.common_name
-    organization = var.organization
-  }
+    key_algorithm   = tls_private_key.vault[count.index].algorithm
+    private_key_pem = tls_private_key.vault[count.index].private_key_pem
+    subject {
+      common_name  = var.common_name
+      organization = var.organization
+    }
 
-  dns_names = [
-    "*.${var.dns_domain}",
-    "${var.dns_domain}",
-    "${var.server_name}*"
+    dns_names = [
+      "*.${var.dns_domain}",
+      "${var.dns_domain}",
+      "${var.server_name}*"
     ]
   
 
-  ip_addresses   = [
-     "127.0.0.1"
-      ]
+    ip_addresses   = [
+      "127.0.0.1"
+    ]
 }
 
 resource "tls_locally_signed_cert" "vault" {
