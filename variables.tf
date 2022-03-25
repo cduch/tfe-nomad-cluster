@@ -10,12 +10,12 @@ variable "instance_type" {
 
 variable "name" {
   description = "Environment name to pass to Name tag"
-  default     = "js-nomad"
+  default     = "cduch-nomad"
 }
 
 variable "key_name" {
   description = "SSH key to connect to EC2 instances. Use the one that is already uploaded into your AWS region or add one to main.tf"
-  default     = "joestack"
+  default     = "cduch"
 }
 
 variable "whitelist_ip" {
@@ -70,12 +70,12 @@ variable "client_name" {
 }
 variable "tag_key" {
   description = "Server rejoin tag_key to identify servers within a region"
-  default     = "js_nomad_tag"
+  default     = "cduch_nomad_tag"
 }
 
 variable "tag_value" {
   description = "Server rejoin tag_value to identify servers within a region"
-  default     = "js_nomad_value"
+  default     = "cduch_nomad_value"
 }
 
 variable "root_block_device_size" {
@@ -140,7 +140,7 @@ variable "common_name" {
 
 variable "organization" {
   description = "Cert Organaization"
-  default     = "joestack"
+  default     = "carstenduch"
 }
 
 variable "dns_domain" {
